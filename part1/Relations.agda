@@ -198,5 +198,13 @@ trichotomy (suc m) (suc n) with trichotomy m n
   → n < p
     -----
   → m < p
-<-trans-revisited z<s (s<s _) = ≤-iff-<′ (≤-trans (<-iff-≤ z<s) (<-iff-≤ (s<s _)))
-<-trans-revisited (s<s m<n) (s<s n<p) = ≤-iff-<′ ( ≤-trans (<-iff-≤ (s<s m<n)) (<-iff-≤ (s<s n<p)))
+
+helper : ∀ {m n : ℕ}
+  → m < n
+    ---------
+    → m < suc n
+helper z<s       = z<s
+helper (s<s m<n) = s<s (helper m<n)
+
+<-trans-revisited z<s (s<s n<p) = ≤-iff-<′ (≤-trans (<-iff-≤ z<s) (<-iff-≤ (s<s n<p)))
+<-trans-revisited (s<s m<n) (s<s n<p) = ≤-iff-<′ (≤-trans (s≤s (<-iff-≤ (helper m<n))) (<-iff-≤ (s<s n<p)))
