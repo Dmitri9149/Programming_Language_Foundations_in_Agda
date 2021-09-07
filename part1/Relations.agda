@@ -82,7 +82,55 @@ data _≤_ : ℕ → ℕ → Set where
 
 *-mono-≤ m n p q m≤n p≤q  =  ≤-trans (*-monoˡ-≤ m n p m≤n) (*-monoʳ-≤ n p q p≤q)
 
+-- Show that strict inequality is transitive.
+
+infix 4 _<_
+
+data _<_ : ℕ → ℕ → Set where
+
+  z<s : ∀ {n : ℕ}
+      ------------
+    → zero < suc n
+
+  s<s : ∀ {m n : ℕ}
+    → m < n
+      -------------
+    → suc m < suc n
+
+<-trans : ∀ {m n p : ℕ}
+  → m < n
+  → n < p
+    -----
+  → m < p
+<-trans z<s       (s<s _)          =  z<s
+<-trans (s<s m<n) (s<s n<p)  =  s<s (<-trans m<n n<p)
 
 
 
+data Trichotomy (m n : ℕ) : Set where
 
+  up :
+      m < n
+      ---------
+    → Trichotomy m n
+
+  down :
+      n < m
+      ---------
+    → Trichotomy m n
+
+  equal :
+      m ≡ n
+      ---------
+    → Trichotomy m n
+
+trichotomy : ∀ (m n : ℕ) → Trichotomy m n
+
+trichotomy zero    zero                         =  equal refl
+trichotomy zero    (suc n)                         =  up z<s
+trichotomy (suc m) zero                      =  down z<s
+trichotomy (suc m) (suc n) with trichotomy m n
+...                        | up m<n  =  up (s<s m<n)
+...                        | down n<m  =  down (s<s n<m)
+...                        | equal refl = equal refl
+      
