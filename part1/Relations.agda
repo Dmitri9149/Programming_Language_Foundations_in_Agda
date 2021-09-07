@@ -105,7 +105,15 @@ data _<_ : ℕ → ℕ → Set where
 <-trans z<s       (s<s _)          =  z<s
 <-trans (s<s m<n) (s<s n<p)  =  s<s (<-trans m<n n<p)
 
+-- Show that strict inequality satisfies a weak version of trichotomy, in
+-- the sense that for any `m` and `n` that one of the following holds:
+--  * `m < n`,
+--  * `m ≡ n`, or
+--  * `m > n`.
 
+-- Define `m > n` to be the same as `n < m`.
+-- You will need a suitable data declaration,
+-- similar to that used for totality.
 
 data Trichotomy (m n : ℕ) : Set where
 
@@ -134,3 +142,27 @@ trichotomy (suc m) (suc n) with trichotomy m n
 ...                        | down n<m  =  down (s<s n<m)
 ...                        | equal refl = equal refl
       
+-- Show that addition is monotonic with respect to strict inequality.
+-- As with inequality, some additional definitions may be required.
+
+-- ∀ {m n p q : ℕ} → m < n → p < q → m + p < n + q
+
++-monoʳ-< : ∀ (n p q : ℕ)
+  → p < q
+    -------------
+  → n + p < n + q
++-monoʳ-< zero    p q p<q  =  p<q
++-monoʳ-< (suc n) p q p<q  =  s<s (+-monoʳ-< n p q p<q)
+
++-monoˡ-< : ∀ (m n p : ℕ)
+  → m < n
+    -------------
+  → m + p < n + p
++-monoˡ-< m n p m<n  rewrite +-comm m p | +-comm n p  = +-monoʳ-< p m n m<n
+
++-mono-< : ∀ (m n p q : ℕ)
+  → m < n
+  → p < q
+    -------------
+  → m + p < n + q
++-mono-< m n p q m<n p<q  =  <-trans (+-monoˡ-< m n p m<n) (+-monoʳ-< n p q p<q)
