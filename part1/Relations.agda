@@ -145,8 +145,6 @@ trichotomy (suc m) (suc n) with trichotomy m n
 -- Show that addition is monotonic with respect to strict inequality.
 -- As with inequality, some additional definitions may be required.
 
--- ∀ {m n p q : ℕ} → m < n → p < q → m + p < n + q
-
 +-monoʳ-< : ∀ (n p q : ℕ)
   → p < q
     -------------
@@ -170,13 +168,19 @@ trichotomy (suc m) (suc n) with trichotomy m n
 -- Show that `suc m ≤ n` implies `m < n`, and conversely.
 
 ≤-iff-< : ∀ (m n : ℕ)
-
   → suc m ≤ n
     ---------
   → m < n
 
 ≤-iff-< zero _ (s≤s _) = z<s
 ≤-iff-< (suc _) (suc _) (s≤s m≤n) = s<s (≤-iff-< _ _ m≤n)
+
+<-iff-≤ : ∀ {m n : ℕ}
+  → m < n
+    ---------
+  → suc m ≤ n
+<-iff-≤ z<s       = s≤s z≤n
+<-iff-≤ (s<s m<n) = s≤s (<-iff-≤ m<n)
 
 ≤-iff-<′ : ∀ {m n : ℕ}
   → suc m ≤ n
@@ -185,4 +189,14 @@ trichotomy (suc m) (suc n) with trichotomy m n
 ≤-iff-<′ (s≤s z≤n)       = z<s
 ≤-iff-<′ (s≤s (s≤s m≤n)) = s<s (≤-iff-<′ (s≤s m≤n))
 
+-- Give an alternative proof that strict inequality is transitive,
+-- using the relation between strict inequality and inequality and
+-- the fact that inequality is transitive.
 
+<-trans-revisited : ∀ {m n p : ℕ}
+  → m < n
+  → n < p
+    -----
+  → m < p
+<-trans-revisited z<s (s<s _) = ≤-iff-<′ (≤-trans (<-iff-≤ z<s) (<-iff-≤ (s<s _)))
+<-trans-revisited (s<s m<n) (s<s n<p) = ≤-iff-<′ ( ≤-trans (<-iff-≤ (s<s m<n)) (<-iff-≤ (s<s n<p)))
