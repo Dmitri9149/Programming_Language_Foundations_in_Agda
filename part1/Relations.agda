@@ -166,3 +166,23 @@ trichotomy (suc m) (suc n) with trichotomy m n
     -------------
   → m + p < n + q
 +-mono-< m n p q m<n p<q  =  <-trans (+-monoˡ-< m n p m<n) (+-monoʳ-< n p q p<q)
+
+-- Show that `suc m ≤ n` implies `m < n`, and conversely.
+
+≤-iff-< : ∀ (m n : ℕ)
+
+  → suc m ≤ n
+    ---------
+  → m < n
+
+≤-iff-< zero _ (s≤s _) = z<s
+≤-iff-< (suc _) (suc _) (s≤s m≤n) = s<s (≤-iff-< _ _ m≤n)
+
+≤-iff-<′ : ∀ {m n : ℕ}
+  → suc m ≤ n
+    ---------
+  → m < n
+≤-iff-<′ (s≤s z≤n)       = z<s
+≤-iff-<′ (s≤s (s≤s m≤n)) = s<s (≤-iff-<′ (s≤s m≤n))
+
+
