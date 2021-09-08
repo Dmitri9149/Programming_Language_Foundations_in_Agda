@@ -2,6 +2,7 @@ import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 open import Data.Nat.Properties using (+-comm; +-identityʳ; *-comm)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 
 -- Give an example of a preorder that is not a partial order.
 
@@ -258,3 +259,33 @@ o+e≡o (suc em) en  =  suc (e+e≡e em en)
 
 o+o≡e (suc zero) om = suc om
 o+o≡e (suc (suc on)) om = suc (suc (o+o≡e on om ))
+
+
+-- Bin-predicates 
+
+data Bin : Set where
+  ⟨⟩ : Bin
+  _O : Bin → Bin
+  _I : Bin → Bin
+
+inc : Bin → Bin
+inc ⟨⟩ = ⟨⟩ I
+inc (⟨⟩ I) = ⟨⟩ I O
+inc (⟨⟩ O) = ⟨⟩ I
+inc (n O) = n I
+inc (n I) = ((inc n) O)
+
+to   : ℕ → Bin
+from : Bin → ℕ
+
+to 0 = ⟨⟩ O
+to 1 = ⟨⟩ I 
+to (suc n) = inc ( to n)
+
+from (⟨⟩ O) = 0
+from ⟨⟩ = 0
+from (⟨⟩ I) = 1
+from (b O) = 2 * from b
+from (b I) = 2 * from b + 1
+
+
