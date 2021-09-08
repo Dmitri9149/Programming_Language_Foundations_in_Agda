@@ -208,3 +208,53 @@ helper (s<s m<n) = s<s (helper m<n)
 
 <-trans-revisited z<s (s<s n<p) = ≤-iff-<′ (≤-trans (<-iff-≤ z<s) (<-iff-≤ (s<s n<p)))
 <-trans-revisited (s<s m<n) (s<s n<p) = ≤-iff-<′ (≤-trans (s≤s (<-iff-≤ (helper m<n))) (<-iff-≤ (s<s n<p)))
+
+
+-- Show that the sum of two odd numbers is even.
+
+data even : ℕ → Set
+data odd  : ℕ → Set
+
+data even where
+
+  zero :
+      ---------
+      even zero
+
+  suc  : ∀ {n : ℕ}
+    → odd n
+      ------------
+    → even (suc n)
+
+data odd where
+
+  suc  : ∀ {n : ℕ}
+    → even n
+      -----------
+    → odd (suc n)
+
+e+e≡e : ∀ {m n : ℕ}
+  → even m
+  → even n
+    ------------
+  → even (m + n)
+
+o+e≡o : ∀ {m n : ℕ}
+  → odd m
+  → even n
+    -----------
+  → odd (m + n)
+
+o+o≡e : ∀ {m n : ℕ}
+  → odd m
+  → odd n
+    ------------
+  → even (m + n)
+
+e+e≡e zero     en  =  en
+e+e≡e (suc om) en  =  suc (o+e≡o om en)
+
+o+e≡o (suc em) en  =  suc (e+e≡e em en)
+
+o+o≡e (suc zero) om = suc om
+o+o≡e (suc (suc on)) om = suc (suc (o+o≡e on om ))
