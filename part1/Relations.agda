@@ -290,6 +290,17 @@ from (b O) = 2 * from b
 from (b I) = 2 * from b + 1
 
 
+data One : Bin → Set where 
+  one : 
+     -------
+     One (⟨⟩ I)
+  _O : ∀ {b : Bin} → One b → One (b O)
+  _I : ∀ {b : Bin} → One b → One (b I)
+
+data Can : Bin → Set where
+  zero : Can (⟨⟩ O)
+  can : ∀ {b : Bin} → One b → Can b
+  
 
 
 
