@@ -3,6 +3,7 @@ open Eq using (_≡_; refl; cong)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 open import Data.Nat.Properties using (+-comm; +-identityʳ; *-comm)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+open import Induction` using (from∘to; from∘inc≡suc∘from; 2*n≡n+n; +-suc_suc)
 
 -- Give an example of a preorder that is not a partial order.
 
@@ -287,5 +288,8 @@ from ⟨⟩ = 0
 from (⟨⟩ I) = 1
 from (b O) = 2 * from b
 from (b I) = 2 * from b + 1
+
+
+
 
 
