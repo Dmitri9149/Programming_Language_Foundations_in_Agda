@@ -270,11 +270,9 @@ data Bin : Set where
   _I : Bin → Bin
 
 inc : Bin → Bin
-inc ⟨⟩ = ⟨⟩ I
-inc (⟨⟩ I) = ⟨⟩ I O
-inc (⟨⟩ O) = ⟨⟩ I
-inc (n O) = n I
-inc (n I) = ((inc n) O)
+inc ⟨⟩    = ⟨⟩ I
+inc (b O) = b I
+inc (b I) = inc b O
 
 to   : ℕ → Bin
 from : Bin → ℕ
@@ -283,12 +281,9 @@ to 0 = ⟨⟩ O
 to 1 = ⟨⟩ I 
 to (suc n) = inc ( to n)
 
-from (⟨⟩ O) = 0
-from ⟨⟩ = 0
-from (⟨⟩ I) = 1
-from (b O) = 2 * from b
-from (b I) = 2 * from b + 1
-
+from ⟨⟩    = zero
+from (b O) = 2 * (from b)
+from (b I) = 2 * (from b) + 1
 
 data One : Bin → Set where 
   one : 
@@ -299,8 +294,29 @@ data One : Bin → Set where
 
 data Can : Bin → Set where
   zero : Can (⟨⟩ O)
-  can : ∀ {b : Bin} → One b → Can b
-  
+  can : ∀ {b : Bin} → One b → Can b 
+
+-- Can b
+------------
+-- Can (inc b)
+
+one_inc : ∀ {b : Bin} → One b → One (inc b)
+one_inc one    = one O
+one_inc (o O) = o I
+one_inc (o I) = (one_inc o) O
+
+can_inc : ∀ {b : Bin} → Can b → Can (inc b)
+can_inc zero = can one 
+can_inc (can one) = can (one O)
+can_inc (can (o O)) = can (o I)
+can_inc (can (o I)) = can (one_inc (o I))
+
+----------
+-- Can (to n)
+
+can_to_n : ∀ {n: ℕ} → Can (to n)
+can_to_n zero = can zero
+
 
 
 
