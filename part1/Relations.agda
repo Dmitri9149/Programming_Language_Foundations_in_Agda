@@ -278,7 +278,6 @@ to   : ℕ → Bin
 from : Bin → ℕ
 
 to 0 = ⟨⟩ O
-to 1 = ⟨⟩ I 
 to (suc n) = inc ( to n)
 
 from ⟨⟩    = zero
@@ -314,8 +313,14 @@ can_inc (can (o I)) = can (one_inc (o I))
 ----------
 -- Can (to n)
 
-can_to_n : ∀ {n: ℕ} → Can (to n)
-can_to_n zero = can zero
+can_to_n : ∀ (n : ℕ) → Can (to n)
+can_to_n zero = zero
+can_to_n (suc n) = can_inc (can_to_n n)
+
+Can b
+---------------
+to (from b) ≡ b
+
 
 
 
