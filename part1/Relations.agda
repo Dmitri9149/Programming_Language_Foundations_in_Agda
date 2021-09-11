@@ -1,9 +1,9 @@
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong)
+open Eq using (_≡_; refl; cong; sym)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
 open import Data.Nat.Properties using (+-comm; +-identityʳ; *-comm)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
-open import Induction` using (from∘to; from∘inc≡suc∘from; 2*n≡n+n; +-suc_suc)
+open import Induction` using (from∘to; from∘inc≡suc∘from; 2*n≡n+n; +-suc; +-suc_suc)
 
 -- Give an example of a preorder that is not a partial order.
 
@@ -288,8 +288,8 @@ data One : Bin → Set where
   one : 
      -------
      One (⟨⟩ I)
-  _O : ∀ {b : Bin} → One b → One (b O)
-  _I : ∀ {b : Bin} → One b → One (b I)
+  _OO : ∀ {b : Bin} → One b → One (b O)
+  _II : ∀ {b : Bin} → One b → One (b I)
 
 data Can : Bin → Set where
   zero : Can (⟨⟩ O)
@@ -300,15 +300,15 @@ data Can : Bin → Set where
 -- Can (inc b)
 
 one_inc : ∀ {b : Bin} → One b → One (inc b)
-one_inc one    = one O
-one_inc (o O) = o I
-one_inc (o I) = (one_inc o) O
+one_inc one    = one OO
+one_inc (o OO) = o II
+one_inc (o II) = (one_inc o) OO
 
 can_inc : ∀ {b : Bin} → Can b → Can (inc b)
 can_inc zero = can one 
-can_inc (can one) = can (one O)
-can_inc (can (o O)) = can (o I)
-can_inc (can (o I)) = can (one_inc (o I))
+can_inc (can one) = can (one OO)
+can_inc (can (o OO)) = can (o II)
+can_inc (can (o II)) = can (one_inc (o II))
 
 ----------
 -- Can (to n)
@@ -317,11 +317,12 @@ can_to_n : ∀ (n : ℕ) → Can (to n)
 can_to_n zero = zero
 can_to_n (suc n) = can_inc (can_to_n n)
 
-Can b
+-- Can b
 ---------------
-to (from b) ≡ b
+-- to (from b) ≡ b
 
-
-
-
+to_bin : ∀ {b : Bin} → One (b) → Bin 
+to_bin one = ⟨⟩ I
+to_bin (b II) = (to_bin b) I
+to_bin (b OO) = (to_bin b) O
 
