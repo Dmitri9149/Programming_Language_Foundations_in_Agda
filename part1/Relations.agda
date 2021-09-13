@@ -321,8 +321,4 @@ can_to_n (suc n) = can_inc (can_to_n n)
 ---------------
 -- to (from b) ≡ b
 
-to_bin : ∀ {b : Bin} → One (b) → Bin 
-to_bin one = ⟨⟩ I
-to_bin (b II) = (to_bin b) I
-to_bin (b OO) = (to_bin b) O
 
