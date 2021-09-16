@@ -73,3 +73,21 @@ record _⇔_ (A B : Set) : Set where
     ; from = _⇔_.to A⇔B
     }
 
+_∘_ : ∀ {A B C : Set} → (B → C) → (A → B) → (A → C)
+(g ∘ f) x  = g (f x)
+
+_∘′_ : ∀ {A B C : Set} → (B → C) → (A → B) → (A → C)
+g ∘′ f  =  λ x → g (f x)
+
+⇔-trans : ∀ {A B C : Set}
+  → A ⇔ B
+  → B ⇔ C
+    -----
+  → A ⇔ C
+⇔-trans A⇔B B⇔C =
+  record
+    { to   = _⇔_.to B⇔C   ∘ _⇔_.to A⇔B
+    ; from =  _⇔_.from A⇔B ∘  _⇔_.from B⇔C
+    }
+
+    
