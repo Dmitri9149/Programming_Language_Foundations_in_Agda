@@ -90,4 +90,36 @@ g ∘′ f  =  λ x → g (f x)
     ; from =  _⇔_.from A⇔B ∘  _⇔_.from B⇔C
     }
 
-    
+{-
+...define a datatype `Bin` of bitstrings representing natural numbers,
+and asks you to define the following functions and predicates:
+
+    to : ℕ → Bin
+    from : Bin → ℕ
+
+which satisfy the following property:
+
+    from (to n) ≡ n
+
+Using the above, establish that there is an embedding of `ℕ` into `Bin`.
+-}
+
+
+data Bin : Set where
+  ⟨⟩ : Bin
+  _O : Bin → Bin
+  _I : Bin → Bin
+
+postulate
+  to`` : ℕ → Bin
+  from`` : Bin → ℕ
+  from∘to`` : ∀ (n : ℕ) → from`` (to`` n) ≡ n
+
+
+ℕ_into_Bin : ℕ ≲ Bin
+ℕ_into_Bin =
+  record
+    { to      = to``
+    ; from    = from``
+    ; from∘to = from∘to``
+    }
