@@ -62,5 +62,14 @@ record _⇔_ (A B : Set) : Set where
     ; from    = λ{y → y}
     }
 
+⇔-sym : ∀ {A B : Set}
+  → A ⇔ B
+    -----
+  → B ⇔ A
 
+⇔-sym A⇔B =
+  record
+    { to   = _⇔_.from A⇔B
+    ; from = _⇔_.to A⇔B
+    }
 
