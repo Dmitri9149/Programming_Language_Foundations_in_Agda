@@ -119,5 +119,19 @@ case-⊎ f g (inj₂ y) = g y
     ; to∘from = λ y → ⊎-swap_swap y
     }
 
+to_assoc : ∀ {A B C : Set} → (A ⊎ B) ⊎ C →  A ⊎ (B ⊎ C)
+to_assoc (inj₁ (inj₁ x)) = inj₁ x
+to_assoc (inj₂ x) = (inj₂ (inj₂ x))
+to_assoc (inj₁ (inj₂ x)) = inj₂ (inj₁ x)
+
+⊎-assoc : ∀ {A B C : Set} → (A ⊎ B) ⊎ C ≃ A ⊎ (B ⊎ C)
+⊎-assoc =
+  record
+    { to      = λ x → to_assoc x 
+--    ; from    = λ{ ⟨ x , ⟨ y , z ⟩ ⟩ → ⟨ ⟨ x , y ⟩ , z ⟩ }
+--    ; from∘to = λ{ ⟨ ⟨ x , y ⟩ , z ⟩ → refl }
+--    ; to∘from = λ{ ⟨ x , ⟨ y , z ⟩ ⟩ → refl }
+    }
+
 
 
