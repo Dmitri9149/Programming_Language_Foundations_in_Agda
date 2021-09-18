@@ -10,6 +10,7 @@ postulate
       -----------------------
     → f ≡ g
 
+
 infix 0 _≃_
 record _≃_ (A B : Set) : Set where
   field
@@ -71,3 +72,52 @@ proj₂ ⟨ x , y ⟩ = y
     ; from∘to = λ x → refl
     ; to∘from = λ x → η-× x
     }
+
+
+-- Show sum is commutative up to isomorphism.
+
+data _⊎_ (A B : Set) : Set where
+
+  inj₁ :
+      A
+      -----
+    → A ⊎ B
+
+  inj₂ :
+      B
+      -----
+    → A ⊎ B
+
+case-⊎ : ∀ {A B C : Set}
+  → (A → C)
+  → (B → C)
+  → A ⊎ B
+    -----------
+  → C
+case-⊎ f g (inj₁ x) = f x
+case-⊎ f g (inj₂ y) = g y
+
+η-⊎ : ∀ {A B : Set} (w : A ⊎ B) → case-⊎ inj₁ inj₂ w ≡ w
+η-⊎ (inj₁ x) = refl
+η-⊎ (inj₂ y) = refl
+
+⊎-swap : ∀ {A B : Set} → A ⊎ B → B ⊎ A
+⊎-swap (inj₁ a) = inj₂ a
+⊎-swap (inj₂ b) = inj₁ b
+
+⊎-swap_swap : ∀ {A B : Set} → (w : A ⊎ B)
+  → ⊎-swap (⊎-swap w) ≡ w
+⊎-swap_swap (inj₁ a) = refl
+⊎-swap_swap (inj₂ b) = refl
+
+⊎-comm : ∀ {A B : Set} → A ⊎ B ≃ B ⊎ A
+⊎-comm =
+  record
+    { to      = λ x → ⊎-swap x
+    ; from    = λ y → ⊎-swap y
+    ; from∘to = λ x → ⊎-swap_swap x
+    ; to∘from = λ y → ⊎-swap_swap y
+    }
+
+
+
