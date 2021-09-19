@@ -139,9 +139,9 @@ from_to_assoc (inj₂ x) = refl
 
 to_from_assoc : ∀ {A B C : Set} → (w : (A ⊎ (B ⊎ C)))
   → to_assoc (from_assoc w) ≡ w
-to_from_assoc (inj₁ a) = refl
-to_from_assoc (inj₂ (inj₁ b)) = refl
-to_from_assoc (inj₂ (inj₂ c)) = refl
+to_from_assoc (inj₁ x) = refl
+to_from_assoc (inj₂ (inj₁ x)) = refl
+to_from_assoc (inj₂ (inj₂ x)) = refl
 
 ⊎-assoc : ∀ {A B C : Set} → (A ⊎ B) ⊎ C ≃ A ⊎ (B ⊎ C)
 ⊎-assoc =
@@ -152,5 +152,36 @@ to_from_assoc (inj₂ (inj₂ c)) = refl
     ; to∘from = λ x → to_from_assoc x
     }
 
+-- Show empty is the left identity of sums up to isomorphism.
+
+data ⊥ : Set where
+
+⊥-elim : ∀ {A : Set}
+  → ⊥
+    --
+  → A
+
+⊥-elim ()
+
+⊥-to : ∀ {A : Set} → ⊥ ⊎ A → A
+⊥-to (inj₁ ())
+⊥-to (inj₂ x) = x
+
+⊥-from : ∀ {A : Set} → A → ⊥ ⊎ A 
+⊥-from x = (inj₂ x)
+
+⊥-from∘to : ∀ {A : Set} → (x : ⊥ ⊎ A)
+  → inj₂ (⊥-to x) ≡ x
+⊥-from∘to (inj₁ ())
+⊥-from∘to (inj₂ x) = refl
+
+⊥-identityˡ : ∀ {A : Set} → ⊥ ⊎ A ≃ A
+⊥-identityˡ =
+  record
+    { to      = λ x → ⊥-to x
+    ; from    = λ x → ⊥-from x
+    ; from∘to = λ x → ⊥-from∘to x
+    ; to∘from = λ x → refl
+    }
 
 
