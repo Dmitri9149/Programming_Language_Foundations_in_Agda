@@ -119,18 +119,37 @@ case-⊎ f g (inj₂ y) = g y
     ; to∘from = λ y → ⊎-swap_swap y
     }
 
+-- Show sum is associative up to isomorphism.
+
 to_assoc : ∀ {A B C : Set} → (A ⊎ B) ⊎ C →  A ⊎ (B ⊎ C)
 to_assoc (inj₁ (inj₁ x)) = inj₁ x
 to_assoc (inj₂ x) = (inj₂ (inj₂ x))
 to_assoc (inj₁ (inj₂ x)) = inj₂ (inj₁ x)
 
+from_assoc : ∀ {A B C : Set} → A ⊎ (B ⊎ C) → (A ⊎ B) ⊎ C
+from_assoc (inj₁ x) = (inj₁ (inj₁ x))
+from_assoc (inj₂ (inj₂ x)) = inj₂ x
+from_assoc (inj₂ (inj₁ x)) = (inj₁ (inj₂ x))
+
+from_to_assoc : ∀ {A B C : Set} → (w : ((A ⊎ B) ⊎ C))
+  → from_assoc (to_assoc w) ≡ w
+from_to_assoc (inj₁ (inj₁ x)) = refl
+from_to_assoc (inj₁ (inj₂ x)) = refl
+from_to_assoc (inj₂ x) = refl
+
+to_from_assoc : ∀ {A B C : Set} → (w : (A ⊎ (B ⊎ C)))
+  → to_assoc (from_assoc w) ≡ w
+to_from_assoc (inj₁ a) = refl
+to_from_assoc (inj₂ (inj₁ b)) = refl
+to_from_assoc (inj₂ (inj₂ c)) = refl
+
 ⊎-assoc : ∀ {A B C : Set} → (A ⊎ B) ⊎ C ≃ A ⊎ (B ⊎ C)
 ⊎-assoc =
   record
     { to      = λ x → to_assoc x 
---    ; from    = λ{ ⟨ x , ⟨ y , z ⟩ ⟩ → ⟨ ⟨ x , y ⟩ , z ⟩ }
---    ; from∘to = λ{ ⟨ ⟨ x , y ⟩ , z ⟩ → refl }
---    ; to∘from = λ{ ⟨ x , ⟨ y , z ⟩ ⟩ → refl }
+    ; from    = λ x → from_assoc x
+    ; from∘to = λ x → from_to_assoc x
+    ; to∘from = λ x → to_from_assoc x
     }
 
 
