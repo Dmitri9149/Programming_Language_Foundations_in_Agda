@@ -184,4 +184,8 @@ data ⊥ : Set where
     ; to∘from = λ x → refl
     }
 
+-- Show empty is the right identity of sums up to isomorphism.
+
+postulate 
+  ⊥-identityʳ : ∀ {A : Set} → A ⊎ ⊥ ≃ A
 
