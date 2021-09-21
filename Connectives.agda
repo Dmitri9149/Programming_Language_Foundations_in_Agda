@@ -202,4 +202,10 @@ postulate
 ⊎×-implies-×⊎ (inj₁ ⟨ x , y ⟩) = ⟨ inj₁ x , inj₁ y ⟩
 ⊎×-implies-×⊎ (inj₂ ⟨ x , y ⟩) = ⟨ inj₂ x , inj₂ y ⟩
 
+-- Does the converse hold? If so, prove; if not, give a counterexample.
+
+-- counterexample
+-- (⊤ × ⊥) ⊎ (⊤ × ⊥) ≃ ⊥
+-- (⊤ ⊎ ⊥) × (⊤ ⊎ ⊥) ≃ ⊤
+
 
