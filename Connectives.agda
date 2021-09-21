@@ -189,3 +189,17 @@ data ⊥ : Set where
 postulate 
   ⊥-identityʳ : ∀ {A : Set} → A ⊎ ⊥ ≃ A
 
+-- Show that the following property holds:
+-- postulate
+⊎-weak-× : ∀ {A B C : Set} → (A ⊎ B) × C → A ⊎ (B × C)
+⊎-weak-× ⟨ inj₁ x , y ⟩ = inj₁ x 
+⊎-weak-× ⟨ inj₂ x , y ⟩ = inj₂ ⟨ x , y ⟩
+
+
+-- Show that a disjunct of conjuncts implies a conjunct of disjuncts:
+
+⊎×-implies-×⊎ : ∀ {A B C D : Set} → (A × B) ⊎ (C × D) → (A ⊎ C) × (B ⊎ D)
+⊎×-implies-×⊎ (inj₁ ⟨ x , y ⟩) = ⟨ inj₁ x , inj₁ y ⟩
+⊎×-implies-×⊎ (inj₂ ⟨ x , y ⟩) = ⟨ inj₂ x , inj₂ y ⟩
+
+
