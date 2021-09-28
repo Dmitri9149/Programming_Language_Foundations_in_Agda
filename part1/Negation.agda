@@ -164,6 +164,17 @@ Stable A = ¬ ¬ A → A
 ¬-stable : ∀ {A : Set} → Stable (¬ A)
 ¬-stable ¬¬¬a a = ¬¬¬-elim ¬¬¬a a
 
+×-stable : ∀ {A B : Set} → Stable A → Stable B → Stable (A × B)
+×-stable sa sb = λ 
+            { ¬¬axb →
+            ⟨
+             sa (λ ¬a → ¬¬axb λ {⟨ a , b ⟩ → ¬a a}) , 
+             sb (λ ¬b → ¬¬axb λ {⟨ a , b ⟩ → ¬b b}) 
+            ⟩
+            }
+
+
+
 
 
 
