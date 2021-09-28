@@ -144,6 +144,28 @@ Show that each of these implies all the others.
 -}
 
 
+-- Show that any negated formula is stable, and that the conjunction
+-- of two stable formulas is stable.
+Stable : Set → Set
+Stable A = ¬ ¬ A → A
+
+¬¬-intro : ∀ {A : Set}
+  → A
+    -----
+  → ¬ ¬ A
+¬¬-intro x  =  λ{¬x → ¬x x}
+
+¬¬¬-elim : ∀ {A : Set}
+  → ¬ ¬ ¬ A
+    -------
+  → ¬ A
+¬¬¬-elim ¬¬¬x  =  λ x → ¬¬¬x (¬¬-intro x)
+
+¬-stable : ∀ {A : Set} → Stable (¬ A)
+¬-stable ¬¬¬a a = ¬¬¬-elim ¬¬¬a a
+
+
+
 
 
 
