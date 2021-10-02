@@ -22,3 +22,64 @@ open _≃_
     ; to∘from = λ {⟨ f , g ⟩ → refl}
     } 
 
+
+-- Show that a disjunction of universals implies a universal of disjunctions:
+
+-- postulate
+  -- ⊎∀-implies-∀⊎ : ∀ {A : Set} {B C : A → Set} →
+    -- (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x)  →  ∀ (x : A) → B x ⊎ C x
+
+-- Does the converse hold? If so, prove; if not, explain why.
+
+data _⊎_ (A B : Set) : Set where
+
+  inj₁ :
+      A
+      -----
+    → A ⊎ B
+
+  inj₂ :
+      B
+      -----
+    → A ⊎ B
+
+case-⊎ : ∀ {A B C : Set}
+  → (A → C)
+  → (B → C)
+  → A ⊎ B
+    -----------
+  → C
+case-⊎ f g (inj₁ x) = f x
+case-⊎ f g (inj₂ y) = g y
+
+η-⊎ : ∀ {A B : Set} (w : A ⊎ B) → case-⊎ inj₁ inj₂ w ≡ w
+η-⊎ (inj₁ x) = refl
+η-⊎ (inj₂ y) = refl
+
+⊎∀-implies-∀⊎ : ∀ {A : Set} {B C : A → Set} →
+  (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x)  →  ∀ (x : A) → B x ⊎ C x
+
+⊎∀-implies-∀⊎ ( inj₁ f) = λ x → ( inj₁ (f x))
+⊎∀-implies-∀⊎ ( inj₂ f) = λ x → ( inj₂ (f x))
+
+{-
+#### Exercise `∀-×` (practice)
+
+Consider the following type.
+```
+data Tri : Set where
+  aa : Tri
+  bb : Tri
+  cc : Tri
+```
+Let `B` be a type indexed by `Tri`, that is `B : Tri → Set`.
+Show that `∀ (x : Tri) → B x` is isomorphic to `B aa × B bb × B cc`.
+Hint: you will need to postulate a version of extensionality that
+works for dependent functions.
+-}
+
+postulate
+  ∀-extensionality : ∀ {A : Set} {B : A → Set} {f g : ∀(x : A) → B x}
+    → (∀ (x : A) → f x ≡ g x) → f ≡ g
+
+
