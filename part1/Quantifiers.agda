@@ -82,4 +82,34 @@ postulate
   ∀-extensionality : ∀ {A : Set} {B : A → Set} {f g : ∀(x : A) → B x}
     → (∀ (x : A) → f x ≡ g x) → f ≡ g
 
+data Tri : Set where
+  aa : Tri
+  bb : Tri
+  cc : Tri
+
+∀-× : {B : Tri → Set} → (∀ (x : Tri) → B x) ≃ (B aa × B bb × B cc) 
+
+∀-×-to : {B : Tri → Set} → (∀ (x : Tri) → B x) → (B aa × B bb × B cc)
+∀-×-to = λ f → ⟨ f aa , ⟨ f bb , f cc ⟩ ⟩
+
+∀-×-from : {B : Tri → Set} → (B aa × B bb × B cc) → (∀ (x : Tri) → B x)
+∀-×-from = λ { (⟨ baa , ⟨ bbb , bcc ⟩ ⟩) →
+  λ { aa → baa
+    ; bb → bbb
+    ; cc → bcc
+    } 
+  }
+
+∀-×-from∘to : {B : Tri → Set} 
+  → ∀ (f : (x : Tri) → B x ) → (∀-×-from ∘ ∀-×-to) f ≡ f
+∀-×-from∘to = λ f → ∀-extensionality λ {aa → refl ; bb → refl; cc → refl}
+
+∀-× {B} = record
+  { to = ∀-×-to
+  ; from = ∀-×-from
+  ; from∘to = ∀-×-from∘to
+  ; to∘from = λ y → refl
+  }
+
+
 
