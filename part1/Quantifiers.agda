@@ -171,6 +171,21 @@ postulate
     ; to∘from = λ{ (inj₁ ⟨ x , b ⟩) → refl ; (inj₂ ⟨ x , c ⟩) → refl }
     }
 
+{-
+Show that an existential of conjunctions implies a conjunction of existentials:
+postulate
+  ∃×-implies-×∃ : ∀ {A : Set} {B C : A → Set} →
+    ∃[ x ] (B x × C x) → (∃[ x ] B x) × (∃[ x ] C x)
+-}
+
+
+∃×-implies-×∃ : ∀ {A : Set} {B C : A → Set} →
+  ∃[ x ] (B x × C x) → (∃[ x ] B x) × (∃[ x ] C x)
+
+∃×-implies-×∃ ⟨ x , ⟨ b , c ⟩ ⟩ = ⟨ ⟨ x , b ⟩ , ⟨ x , c ⟩ ⟩
+
+
+
 
 
 
