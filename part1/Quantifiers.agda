@@ -185,6 +185,11 @@ postulate
 ∃×-implies-×∃ ⟨ x , ⟨ b , c ⟩ ⟩ = ⟨ ⟨ x , b ⟩ , ⟨ x , c ⟩ ⟩
 
 
+-- ×∃-implies-∃× : ∀ {A : Set} {B C : A → Set} → (∃[ x ] B x) × (∃[ x ] C x) → ∃[ x ] (B x × C x)
+-- ×∃-implies-∃× ⟨ ⟨ x , b ⟩ , ⟨ y , c ⟩ ⟩ = ⟨ x , ⟨ b , c ⟩ ⟩
+-- ×∃-implies-∃× ⟨ ⟨ x , b ⟩ , ⟨ y , c ⟩ ⟩ = ⟨ y , ⟨ b , c ⟩ ⟩
+
+
 
 
 
