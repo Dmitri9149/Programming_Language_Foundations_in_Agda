@@ -111,6 +111,13 @@ data Tri : Set where
   ; to∘from = λ y → refl
   }
 
+-------------
+postulate
+  extensionality : ∀ {A B : Set} {f g : A → B}
+    → (∀ (x : A) → f x ≡ g x)
+      -----------------------
+    → f ≡ g
+
 data Σ (A : Set) (B : A → Set) : Set where
   ⟨_,_⟩ : (x : A) → B x → Σ A B
 
@@ -155,6 +162,14 @@ postulate
 
 ∃-distrib-⊎ : ∀ {A : Set} {B C : A → Set} →
   ∃[ x ] (B x ⊎ C x) ≃ (∃[ x ] B x) ⊎ (∃[ x ] C x)
+
+∃-distrib-⊎ =
+  record
+    { to  = λ{ ⟨ x , (inj₁ b) ⟩ → inj₁ ⟨ x , b ⟩ ; ⟨ x , (inj₂ c) ⟩ → inj₂ ⟨ x , c ⟩ }
+    ; from  = λ{ (inj₁ ⟨ x , b ⟩) → ⟨ x , (inj₁ b) ⟩ ; (inj₂ ⟨ x , c ⟩) → ⟨ x , (inj₂ c) ⟩ }
+    ; from∘to = λ{ ⟨ x , (inj₁ b) ⟩ → refl ; ⟨ x , (inj₂ c) ⟩ → refl }
+    ; to∘from = λ{ (inj₁ ⟨ x , b ⟩) → refl ; (inj₂ ⟨ x , c ⟩) → refl }
+    }
 
 
 
