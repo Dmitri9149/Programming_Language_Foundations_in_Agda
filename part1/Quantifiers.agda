@@ -111,5 +111,52 @@ data Tri : Set where
   ; to∘from = λ y → refl
   }
 
+data Σ (A : Set) (B : A → Set) : Set where
+  ⟨_,_⟩ : (x : A) → B x → Σ A B
+
+Σ-syntax = Σ
+infix 2 Σ-syntax
+syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B
+
+record Σ′ (A : Set) (B : A → Set) : Set where
+  field
+    proj₁′ : A
+    proj₂′ : B proj₁′
+
+∃ : ∀ {A : Set} (B : A → Set) → Set
+∃ {A} B = Σ A B
+
+∃-syntax = ∃
+syntax ∃-syntax (λ x → B) = ∃[ x ] B
+
+∃-elim : ∀ {A : Set} {B : A → Set} {C : Set}
+  → (∀ x → B x → C)
+  → ∃[ x ] B x
+    ---------------
+  → C
+∃-elim f ⟨ x , y ⟩ = f x y
+
+∀∃-currying : ∀ {A : Set} {B : A → Set} {C : Set}
+  → (∀ x → B x → C) ≃ (∃[ x ] B x → C)
+∀∃-currying =
+  record
+    { to      =  λ{ f → λ{ ⟨ x , y ⟩ → f x y }}
+    ; from    =  λ{ g → λ{ x → λ{ y → g ⟨ x , y ⟩ }}}
+    ; from∘to =  λ{ f → refl }
+    ; to∘from =  λ{ g → extensionality λ{ ⟨ x , y ⟩ → refl }}
+    }
+
+-- Show that existentials distribute over disjunction:
+{--
+postulate
+  ∃-distrib-⊎ : ∀ {A : Set} {B C : A → Set} →
+    ∃[ x ] (B x ⊎ C x) ≃ (∃[ x ] B x) ⊎ (∃[ x ] C x)
+-}
+
+∃-distrib-⊎ : ∀ {A : Set} {B C : A → Set} →
+  ∃[ x ] (B x ⊎ C x) ≃ (∃[ x ] B x) ⊎ (∃[ x ] C x)
+
+
+
 
 
