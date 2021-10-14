@@ -238,6 +238,14 @@ even-∃ (even-suc o) with odd-∃ o
 odd-∃  (odd-suc e)  with even-∃ e
 ...                    | ⟨ m , refl ⟩  =  ⟨ m , refl ⟩
 
+∃-even : ∀ {n : ℕ} → ∃[ m ] (    m * 2 ≡ n) → even n
+∃-odd  : ∀ {n : ℕ} → ∃[ m ] (1 + m * 2 ≡ n) →  odd n
+
+∃-even ⟨  zero , refl ⟩  =  even-zero
+∃-even ⟨ suc m , refl ⟩  =  even-suc (∃-odd ⟨ m , refl ⟩)
+
+∃-odd  ⟨     m , refl ⟩  =  odd-suc (∃-even ⟨ m , refl ⟩)
+
 
 
 
