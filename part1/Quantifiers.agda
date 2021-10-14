@@ -1,6 +1,7 @@
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
 open import Function using (_∘_)
+open import Data.Sum using (_⊎_; inj₁; inj₂)
 
 infix 0 _≃_
 record _≃_ (A B : Set) : Set where
@@ -30,7 +31,7 @@ open _≃_
     -- (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x)  →  ∀ (x : A) → B x ⊎ C x
 
 -- Does the converse hold? If so, prove; if not, explain why.
-
+{- 
 data _⊎_ (A B : Set) : Set where
 
   inj₁ :
@@ -55,6 +56,7 @@ case-⊎ f g (inj₂ y) = g y
 η-⊎ : ∀ {A B : Set} (w : A ⊎ B) → case-⊎ inj₁ inj₂ w ≡ w
 η-⊎ (inj₁ x) = refl
 η-⊎ (inj₂ y) = refl
+-}
 
 ⊎∀-implies-∀⊎ : ∀ {A : Set} {B C : A → Set} →
   (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x)  →  ∀ (x : A) → B x ⊎ C x
@@ -184,10 +186,28 @@ postulate
 
 ∃×-implies-×∃ ⟨ x , ⟨ b , c ⟩ ⟩ = ⟨ ⟨ x , b ⟩ , ⟨ x , c ⟩ ⟩
 
-
 -- ×∃-implies-∃× : ∀ {A : Set} {B C : A → Set} → (∃[ x ] B x) × (∃[ x ] C x) → ∃[ x ] (B x × C x)
 -- ×∃-implies-∃× ⟨ ⟨ x , b ⟩ , ⟨ y , c ⟩ ⟩ = ⟨ x , ⟨ b , c ⟩ ⟩
 -- ×∃-implies-∃× ⟨ ⟨ x , b ⟩ , ⟨ y , c ⟩ ⟩ = ⟨ y , ⟨ b , c ⟩ ⟩
+
+
+-- Let Tri and B be as in Exercise ∀-×. Show that ∃[ x ] B x is isomorphic to B aa ⊎ B bb ⊎ B cc.
+∃-⊎ : {B : Tri → Set} → (∃[ x ] B x) ≃ (B aa  ⊎ B bb ⊎ B cc)
+
+∃-⊎ = record
+  { to = λ { ⟨ aa , p ⟩ → inj₁ p ; ⟨ bb , p ⟩ → inj₂ (inj₁ p) ; ⟨ cc , p ⟩ → inj₂ (inj₂ p)
+    }
+    ;
+    from = λ { (inj₁ b) → ⟨ aa , b ⟩ ; (inj₂ (inj₁ b)) → ⟨ bb , b ⟩ ; (inj₂ (inj₂ b)) → ⟨ cc , b ⟩ 
+    }
+    ;
+    from∘to = λ { ⟨ aa , p ⟩ → refl ; ⟨ bb , p ⟩ → refl ; ⟨ cc , p ⟩ → refl
+    }
+    ;
+    to∘from = λ { (inj₁ b) → refl ; (inj₂ (inj₁ b)) → refl ; (inj₂ (inj₂ b)) → refl
+    }
+  }
+
 
 
 
