@@ -246,8 +246,24 @@ odd-∃  (odd-suc e)  with even-∃ e
 
 ∃-odd  ⟨     m , refl ⟩  =  odd-suc (∃-even ⟨ m , refl ⟩)
 
+postulate 
+  +-comm : ∀ (m n : ℕ) → m + n ≡ n + m
+  +-identityʳ : ∀ (m : ℕ) → m + zero ≡ m
+  +-assoc : ∀ (m n p : ℕ) → (m + n) + p ≡ m + (n + p)
+  +-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
 
+even-∃' : ∀ {n : ℕ} → even n → ∃[ m ] (2 * m      ≡ n)
+odd-∃'  : ∀ {n : ℕ} →  odd n → ∃[ m ] (2 * m + 1  ≡ n)
+∃-even' : ∀ {n : ℕ} → ∃[ m ] (2 * m     ≡ n) → even n
+∃-odd'  : ∀ {n : ℕ} → ∃[ m ] (2 * m + 1 ≡ n) →  odd n
 
+even-∃' even-zero = ⟨ zero , refl ⟩
+even-∃' (even-suc o) with odd-∃' o
+... | ⟨ x , refl ⟩
+  rewrite +-suc (suc x) x
+        | +-assoc 1 x x
+        | +-comm 1 (x + x)
+  = ⟨ suc x , refl ⟩
 
 
 
