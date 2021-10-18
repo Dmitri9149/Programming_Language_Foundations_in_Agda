@@ -281,4 +281,9 @@ odd-∃' (odd-suc e) with even-∃' e
 
 ∃-odd' ⟨ m , refl ⟩ = odd-suc (∃-even' ⟨ m , refl ⟩)
 
+-- Show that y ≤ z holds if and only if there exists a x such that x + y ≡ z
+record _⇔_ (A B : Set) : Set where
+  field
+    to   : A → B
+    from : B → A
 
