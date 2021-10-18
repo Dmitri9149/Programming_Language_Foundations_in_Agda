@@ -1,3 +1,5 @@
+{-# OPTIONS --rewriting #-}
+
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
 open import Function using (_∘_)
@@ -259,13 +261,24 @@ odd-∃'  : ∀ {n : ℕ} →  odd n → ∃[ m ] (2 * m + 1  ≡ n)
 
 even-∃' even-zero = ⟨ zero , refl ⟩
 even-∃' (even-suc o) with odd-∃' o
-... | ⟨ x , refl ⟩
-  rewrite +-suc (suc x) x
-        | +-assoc 1 x x
-        | +-comm 1 (x + x)
-  = ⟨ suc x , refl ⟩
+... | ⟨ m , refl ⟩
+  rewrite +-identityʳ (suc m) 
+    | +-identityʳ m
+    | +-assoc m m 1
+    | +-suc m 0
+  = ⟨ suc m , refl ⟩
 
+-- use rewrite rules
+open import Agda.Builtin.Equality
+open import Agda.Builtin.Equality.Rewrite
+{-# REWRITE +-identityʳ +-suc #-}
 
+odd-∃' (odd-suc e) with even-∃' e
+... | ⟨ m , refl ⟩ = ⟨ m , refl ⟩
 
+∃-even' ⟨ zero , refl ⟩ = even-zero
+∃-even' ⟨ suc m , refl ⟩ = even-suc (∃-odd' ⟨ m , refl ⟩)
+
+∃-odd' ⟨ m , refl ⟩ = odd-suc (∃-even' ⟨ m , refl ⟩)
 
 
