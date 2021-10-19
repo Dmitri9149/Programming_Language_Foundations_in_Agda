@@ -1,6 +1,6 @@
 {-# OPTIONS --rewriting #-}
 
-open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+open import Relation.Binary.PropositionalEquality using (_≡_; refl;sym;cong)
 open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
 open import Function using (_∘_)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
@@ -286,4 +286,62 @@ record _⇔_ (A B : Set) : Set where
   field
     to   : A → B
     from : B → A
+
+data _≤_ : ℕ → ℕ → Set where
+
+  z≤n : ∀ {n : ℕ}
+--------
+    → zero ≤ n
+
+  s≤s : ∀ {m n : ℕ}
+    → m ≤ n
+-------------
+    → suc m ≤ suc n
+
+infix 4 _≤_
+
+postulate 
+  ≤-refl : ∀ {n : ℕ}
+---------------
+   → n ≤ n
+
+  ≤-trans : ∀ {m n p : ℕ}
+    → m ≤ n
+    → n ≤ p
+-----
+    → m ≤ p
+
+  ≤-antisym : ∀ {m n : ℕ}
+    → m ≤ n
+    → n ≤ m
+-----
+    → m ≡ n
+
+  +-monoˡ-≤ : ∀ (m n p : ℕ)
+    → m ≤ n
+-------------
+    → m + p ≤ n + p
+
+  +-mono-≤ : ∀ (m n p q : ℕ)
+    → m ≤ n
+    → p ≤ q
+-------------
+    → m + p ≤ n + q
+
+to_∃-|-≤ : ∀ { m n : ℕ } → (m ≤ n) → (∃[ x ] ( x + m ≡ n))
+to_∃-|-≤  {m} {n} z≤n  = ⟨ n , refl ⟩
+to_∃-|-≤ (s≤s {m} {n} m≤n) with to_∃-|-≤ m≤n
+... | ⟨ x , p ⟩ = ⟨ x , cong suc p ⟩
+
+from_∃-|-≤ : ∀ { m n : ℕ } → (∃[ x ] ( x + m ≡ n)) → (m ≤ n)
+from_∃-|-≤ {m} {n} ⟨ zero , refl ⟩ = ≤-refl 
+from_∃-|-≤ {m} {n} ⟨ suc x , refl ⟩ = +-monoˡ-≤  0 (suc x) m z≤n
+
+∃-|-≤ : ∀ { y z : ℕ } → (y ≤ z) ⇔ (∃[ x ] ( x + y ≡ z))
+∃-|-≤ {y} {z} = record
+  { to = to_∃-|-≤
+  ; from = from_∃-|-≤
+  }
+
+
 
