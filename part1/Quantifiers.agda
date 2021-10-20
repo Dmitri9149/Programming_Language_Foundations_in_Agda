@@ -352,6 +352,18 @@ postulate
     → ¬ (∀ x → B x)
 -}
 
+open import Data.Empty using (⊥; ⊥-elim)
+
+¬_ : Set → Set
+¬ A = A → ⊥
+
+∃¬-implies-¬∀ : ∀ {A : Set} {B : A → Set}
+  → ∃[ x ] (¬ B x)
+    --------------
+  → ¬ (∀ x → B x)
+
+∃¬-implies-¬∀ ⟨ x , p ⟩  = λ g → p (g x)
+
 
 
 
