@@ -398,6 +398,14 @@ can_to_n : ∀ (n : ℕ) → Can (Induction`.to n)
 can_to_n zero = zero
 can_to_n (suc n) = can_inc (can_to_n n)
 
+≡One : ∀ {b : Bin} (o o′ : One b) → o ≡ o′
+≡One one one = refl
+≡One (o OO) (o' OO) = cong _OO (≡One o o') 
+≡One (o II) (o' II) = cong _II (≡One o o')
+
+
+≡Can : ∀ {b : Bin} (cb cb′ : Can b) → cb ≡ cb′
+
 
 
 
