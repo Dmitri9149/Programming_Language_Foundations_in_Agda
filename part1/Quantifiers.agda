@@ -1,7 +1,7 @@
 {-# OPTIONS --rewriting #-}
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl;sym;cong)
-open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
+open import Data.Product using (_×_; proj₁; proj₂)  renaming (_,_ to ⟨_,_⟩)
 open import Function using (_∘_)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_)
@@ -363,6 +363,44 @@ open import Data.Empty using (⊥; ⊥-elim)
   → ¬ (∀ x → B x)
 
 ∃¬-implies-¬∀ ⟨ x , p ⟩  = λ g → p (g x)
+
+
+-- Exercise Bin-isomorphism (stretch)
+-- https://plfa.github.io/Quantifiers/
+
+open import Induction`
+    using (Bin; ⟨⟩; _O; _I; inc; from; to; from∘inc≡suc∘from; from∘to)
+
+data One : Bin → Set where 
+  one : 
+     -------
+     One (⟨⟩ I)
+  _OO : ∀ {b : Bin} → One b → One (b O)
+  _II : ∀ {b : Bin} → One b → One (b I)
+
+data Can : Bin → Set where
+  zero : Can (⟨⟩ O)
+  can : ∀ {b : Bin} → One b → Can b 
+
+one_inc : ∀ {b : Bin} → One b → One (inc b)
+one_inc one    = one OO
+one_inc (o OO) = o II
+one_inc (o II) = (one_inc o) OO
+
+can_inc : ∀ {b : Bin} → Can b → Can (inc b)
+can_inc zero = can one 
+can_inc (can one) = can (one OO)
+can_inc (can (o OO)) = can (o II)
+can_inc (can (o II)) = can (one_inc (o II))
+
+
+can_to_n : ∀ (n : ℕ) → Can (Induction`.to n)
+can_to_n zero = zero
+can_to_n (suc n) = can_inc (can_to_n n)
+
+
+
+
 
 
 
