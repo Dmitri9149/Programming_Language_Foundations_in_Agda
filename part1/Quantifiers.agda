@@ -343,5 +343,15 @@ from_∃-|-≤ {m} {n} ⟨ suc x , refl ⟩ = +-monoˡ-≤  0 (suc x) m z≤n
   ; from = from_∃-|-≤
   }
 
+{-
+Show that existential of a negation implies negation of a universal:
+postulate
+  ∃¬-implies-¬∀ : ∀ {A : Set} {B : A → Set}
+    → ∃[ x ] (¬ B x)
+      --------------
+    → ¬ (∀ x → B x)
+-}
+
+
 
 
