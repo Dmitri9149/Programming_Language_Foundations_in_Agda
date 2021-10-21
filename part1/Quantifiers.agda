@@ -410,6 +410,13 @@ can_to_n (suc n) = can_inc (can_to_n n)
 ≡Can (can (() OO)) zero
 ≡Can (can x) (can y) = cong can (≡One x y)
 
+proj₁` : ∀ {A : Set} {B : A → Set} → Σ A B → A
+proj₁` ⟨ x , _ ⟩ = x
+
+proj₁≡→Can≡ : {cb cb′ : ∃[ b ] Can b} → proj₁` cb ≡ proj₁` cb′ → cb ≡ cb′
+proj₁≡→Can≡ {⟨ x , p ⟩} {⟨ y , q ⟩} refl with ≡Can q p
+... | refl = refl
+
 
 
 
