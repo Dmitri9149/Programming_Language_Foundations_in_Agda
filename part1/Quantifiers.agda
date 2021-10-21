@@ -404,7 +404,11 @@ can_to_n (suc n) = can_inc (can_to_n n)
 ≡One (o II) (o' II) = cong _II (≡One o o')
 
 
-≡Can : ∀ {b : Bin} (cb cb′ : Can b) → cb ≡ cb′
+≡Can : ∀{b : Bin} (cb : Can b) (cb' : Can b) → cb ≡ cb'
+≡Can zero zero = refl
+≡Can zero (can (() OO))
+≡Can (can (() OO)) zero
+≡Can (can x) (can y) = cong can (≡One x y)
 
 
 
