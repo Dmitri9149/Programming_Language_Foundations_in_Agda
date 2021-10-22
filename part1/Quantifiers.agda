@@ -417,6 +417,25 @@ proj₁≡→Can≡ : {cb cb′ : ∃[ b ] Can b} → proj₁` cb ≡ proj₁` c
 proj₁≡→Can≡ {⟨ x , p ⟩} {⟨ y , q ⟩} refl with ≡Can q p
 ... | refl = refl
 
+ℕ-≃-∃Can : ℕ ≃ ∃[ b ](Can b)
+ℕ-≃-∃Can = record
+  { to = go
+  ; from = come
+  ; from∘to = surj
+  ; to∘from = inj
+  }
+ where
+  go : _
+  go zero = ⟨ ⟨⟩ O , zero ⟩
+  go (suc n) = ⟨ Induction`.to (suc n) , can_to_n (suc n) ⟩
+  come : _
+  come ⟨ x , p ⟩ = Induction`.from x
+  surj : _
+  surj zero = refl
+  surj (suc n) =  Induction`.from∘to (suc n)
+  inj : _
+  inj = {!!}
+
 
 
 
