@@ -72,3 +72,7 @@ postulate
 
 ¬suc<zero : ∀ {m : ℕ} → ¬ (suc m < zero)
 ¬suc<zero ()
+
+¬n<n : ∀ {n : ℕ} → ¬ (n < n)
+¬n<n (s<s n<n) = ¬n<n n<n
+
