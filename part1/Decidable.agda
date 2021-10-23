@@ -9,6 +9,66 @@ open import Relation.Nullary.Negation using ()
   renaming (contradiction to ¬¬-intro)
 open import Data.Unit using (⊤; tt)
 open import Data.Empty using (⊥; ⊥-elim)
-open import Relations using (_<_; z<s; s<s)
+open import Relations using (_<_; z<s; s<s;_≤_;z≤n;s≤s)
 open import Isomorphism using (_⇔_)
 
+data Bool : Set where
+  true  : Bool
+  false : Bool
+
+infix 4 _≤ᵇ_
+
+_≤ᵇ_ : ℕ → ℕ → Bool
+zero ≤ᵇ n       =  true
+suc m ≤ᵇ zero   =  false
+suc m ≤ᵇ suc n  =  m ≤ᵇ n
+
+T : Bool → Set
+T true   =  ⊤
+T false  =  ⊥
+
+T→≡ : ∀ (b : Bool) → T b → b ≡ true
+T→≡ true tt   =  refl
+T→≡ false ()
+
+≡→T : ∀ {b : Bool} → b ≡ true → T b
+≡→T refl  =  tt
+
+≤ᵇ→≤ : ∀ (m n : ℕ) → T (m ≤ᵇ n) → m ≤ n
+≤ᵇ→≤ zero    n       tt  =  z≤n
+≤ᵇ→≤ (suc m) zero    ()
+≤ᵇ→≤ (suc m) (suc n) t   =  s≤s (≤ᵇ→≤ m n t)
+
+≤→≤ᵇ : ∀ {m n : ℕ} → m ≤ n → T (m ≤ᵇ n)
+≤→≤ᵇ z≤n        =  tt
+≤→≤ᵇ (s≤s m≤n)  =  ≤→≤ᵇ m≤n
+
+data Dec (A : Set) : Set where
+  yes :   A → Dec A
+  no  : ¬ A → Dec A
+
+¬s≤z : ∀ {m : ℕ} → ¬ (suc m ≤ zero)
+¬s≤z ()
+
+¬s≤s : ∀ {m n : ℕ} → ¬ (m ≤ n) → ¬ (suc m ≤ suc n)
+¬s≤s ¬m≤n (s≤s m≤n) = ¬m≤n m≤n
+
+_≤?_ : ∀ (m n : ℕ) → Dec (m ≤ n)
+zero  ≤? n                   =  yes z≤n
+suc m ≤? zero                =  no ¬s≤z
+suc m ≤? suc n with m ≤? n
+...               | yes m≤n  =  yes (s≤s m≤n)
+...               | no ¬m≤n  =  no (¬s≤s ¬m≤n)
+
+{-
+Analogous to the function above, define a function to decide strict inequality:
+postulate
+  _<?_ : ∀ (m n : ℕ) → Dec (m < n)
+
+-}
+
+¬s<s : ∀ {m n : ℕ} → ¬ (m < n) → ¬ (suc m < suc n)
+¬s<s ¬m<n (s<s x) = ¬m<n x
+
+¬s<z : ∀ {m : ℕ} → ¬ (suc m < zero)
+¬s<z ()
