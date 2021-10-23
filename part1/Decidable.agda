@@ -67,8 +67,8 @@ postulate
 
 -}
 
-¬s<s : ∀ {m n : ℕ} → ¬ (m < n) → ¬ (suc m < suc n)
-¬s<s ¬m<n (s<s x) = ¬m<n x
+¬suc<suc : ∀ {m n : ℕ} → ¬ (m < n) → ¬ (suc m < suc n)
+¬suc<suc ¬m<n (s<s x) = ¬m<n x
 
-¬s<z : ∀ {m : ℕ} → ¬ (suc m < zero)
-¬s<z ()
+¬suc<zero : ∀ {m : ℕ} → ¬ (suc m < zero)
+¬suc<zero ()
