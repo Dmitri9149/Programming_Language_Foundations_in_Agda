@@ -76,3 +76,16 @@ postulate
 ¬n<n : ∀ {n : ℕ} → ¬ (n < n)
 ¬n<n (s<s n<n) = ¬n<n n<n
 
+_<?_ : ∀ (m n : ℕ) → Dec (m < n)
+zero <? zero = no ¬n<n
+suc m <? zero = no ¬suc<zero
+zero <? suc m = yes z<s
+suc m <? suc n with m <? n
+... | yes m<n = yes (s<s m<n)
+... | no ¬m<n = no (¬suc<suc ¬m<n)
+
+
+
+
+
+
