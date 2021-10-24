@@ -145,7 +145,15 @@ not false = true
 ¬? (yes x)  =  no (¬¬-intro x)
 ¬? (no ¬x)  =  yes ¬x
 
+_⊃_ : Bool → Bool → Bool
+_     ⊃ true   =  true
+false ⊃ _      =  true
+true  ⊃ false  =  false
 
+_→-dec_ : ∀ {A B : Set} → Dec A → Dec B → Dec (A → B)
+_     →-dec yes y  =  yes (λ _ → y)
+no ¬x →-dec _      =  yes (λ x → ⊥-elim (¬x x))
+yes x →-dec no ¬y  =  no (λ f → ¬y (f x))
 
 
 
