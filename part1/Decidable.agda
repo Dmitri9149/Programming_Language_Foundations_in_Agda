@@ -138,12 +138,6 @@ yes x ×-dec yes y = yes ⟨ x , y ⟩
 no ¬x ×-dec _     = no λ{ ⟨ x , y ⟩ → ¬x x }
 _     ×-dec no ¬y = no λ{ ⟨ x , y ⟩ → ¬y y }
 
-∧-× : ∀ {A B : Set} (x : Dec A) (y : Dec B) → ⌊ x ⌋ ∧ ⌊ y ⌋ ≡ ⌊ x ×-dec y ⌋
-∧-× (yes x) (yes y) = refl
-∧-× (yes x) (no y)  = refl
-∧-× (no x) _ = refl
-
-
 infixr 5 _∨_
 
 _∨_ : Bool → Bool → Bool
@@ -176,7 +170,10 @@ _     →-dec yes y  =  yes (λ _ → y)
 no ¬x →-dec _      =  yes (λ x → ⊥-elim (¬x x))
 yes x →-dec no ¬y  =  no (λ f → ¬y (f x))
 
-
+∧-× : ∀ {A B : Set} (x : Dec A) (y : Dec B) → ⌊ x ⌋ ∧ ⌊ y ⌋ ≡ ⌊ x ×-dec y ⌋
+∧-× (yes x) (yes y) = refl
+∧-× (yes x) (no y)  = refl
+∧-× (no x) _ = refl
 
 
 
