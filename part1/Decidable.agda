@@ -116,6 +116,23 @@ true  ∧ true  = true
 false ∧ _     = false
 _     ∧ false = false
 
+⌊_⌋ : ∀ {A : Set} → Dec A → Bool
+⌊ yes x ⌋  =  true
+⌊ no ¬x ⌋  =  false
+
+_≤ᵇ′_ : ℕ → ℕ → Bool
+m ≤ᵇ′ n  =  ⌊ m ≤? n ⌋
+
+toWitness : ∀ {A : Set} {D : Dec A} → T ⌊ D ⌋ → A
+toWitness {A} {yes x} tt  =  x
+toWitness {A} {no ¬x} ()
+
+fromWitness : ∀ {A : Set} {D : Dec A} → A → T ⌊ D ⌋
+fromWitness {A} {yes x} _  =  tt
+fromWitness {A} {no ¬x} x  =  ¬x x
+
+
+
 infixr 6 _×-dec_
 
 _×-dec_ : ∀ {A B : Set} → Dec A → Dec B → Dec (A × B)
