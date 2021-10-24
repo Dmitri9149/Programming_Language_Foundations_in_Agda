@@ -1,5 +1,5 @@
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl)
+open Eq using (_≡_; refl;cong)
 open Eq.≡-Reasoning
 open import Data.Nat using (ℕ; zero; suc)
 open import Data.Product using (_×_) renaming (_,_ to ⟨_,_⟩)
@@ -83,6 +83,69 @@ zero <? suc m = yes z<s
 suc m <? suc n with m <? n
 ... | yes m<n = yes (s<s m<n)
 ... | no ¬m<n = no (¬suc<suc ¬m<n)
+
+{-
+Define a function to decide whether two naturals are equal:
+postulate
+  _≡ℕ?_ : ∀ (m n : ℕ) → Dec (m ≡ n)
+-}
+
+¬s≡s : ∀ {m n : ℕ} → ¬ (m ≡ n) → ¬ (suc m ≡ suc n)
+¬s≡s ¬m≡n refl = ¬m≡n refl
+
+_≡ℕ?_ : ∀ (m n : ℕ) → Dec (m ≡ n)
+zero ≡ℕ? zero  = yes refl
+zero ≡ℕ? suc m = no (λ ())
+suc m ≡ℕ? zero = no (λ ())
+suc m ≡ℕ? suc n with m ≡ℕ? n
+... | yes m≡n = yes (cong suc m≡n)
+... | no ¬m≡n = no (¬s≡s ¬m≡n)
+
+{-
+Show that erasure relates corresponding boolean and decidable operations:
+postulate
+  ∧-× : ∀ {A B : Set} (x : Dec A) (y : Dec B) → ⌊ x ⌋ ∧ ⌊ y ⌋ ≡ ⌊ x ×-dec y ⌋
+  ∨-⊎ : ∀ {A B : Set} (x : Dec A) (y : Dec B) → ⌊ x ⌋ ∨ ⌊ y ⌋ ≡ ⌊ x ⊎-dec y ⌋
+  not-¬ : ∀ {A : Set} (x : Dec A) → not ⌊ x ⌋ ≡ ⌊ ¬? x ⌋
+-}
+
+infixr 6 _∧_
+
+_∧_ : Bool → Bool → Bool
+true  ∧ true  = true
+false ∧ _     = false
+_     ∧ false = false
+
+infixr 6 _×-dec_
+
+_×-dec_ : ∀ {A B : Set} → Dec A → Dec B → Dec (A × B)
+yes x ×-dec yes y = yes ⟨ x , y ⟩
+no ¬x ×-dec _     = no λ{ ⟨ x , y ⟩ → ¬x x }
+_     ×-dec no ¬y = no λ{ ⟨ x , y ⟩ → ¬y y }
+
+infixr 5 _∨_
+
+_∨_ : Bool → Bool → Bool
+true  ∨ _      = true
+_     ∨ true   = true
+false ∨ false  = false
+
+infixr 5 _⊎-dec_
+
+_⊎-dec_ : ∀ {A B : Set} → Dec A → Dec B → Dec (A ⊎ B)
+yes x ⊎-dec _     = yes (inj₁ x)
+_     ⊎-dec yes y = yes (inj₂ y)
+no ¬x ⊎-dec no ¬y = no λ{ (inj₁ x) → ¬x x ; (inj₂ y) → ¬y y }
+
+not : Bool → Bool
+not true  = false
+not false = true
+
+¬? : ∀ {A : Set} → Dec A → Dec (¬ A)
+¬? (yes x)  =  no (¬¬-intro x)
+¬? (no ¬x)  =  yes ¬x
+
+
 
 
 
