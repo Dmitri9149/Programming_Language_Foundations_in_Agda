@@ -200,6 +200,12 @@ true iff false = false
 false iff true = false
 false iff false = true
 
+_⇔-dec_ : ∀ {A B : Set} → Dec A → Dec B → Dec (A ⇔ B)
+yes a ⇔-dec yes b = yes record { to = λ _ → b 
+                                ; from = λ _ → a } 
+                                
+
+
 
 
 
