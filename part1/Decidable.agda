@@ -175,5 +175,16 @@ yes x →-dec no ¬y  =  no (λ f → ¬y (f x))
 ∧-× (yes x) (no y)  = refl
 ∧-× (no x) _ = refl
 
+∨-⊎ : ∀ {A B : Set} (x : Dec A) (y : Dec B) → ⌊ x ⌋ ∨ ⌊ y ⌋ ≡ ⌊ x ⊎-dec y ⌋
+∨-⊎ (yes x) (yes y) = refl
+∨-⊎ (yes x) (no y)  = refl
+∨-⊎ (no x) (yes y)  = refl
+∨-⊎ (no x) (no y) = refl
+
+not-¬ : ∀ {A : Set} (x : Dec A) → not ⌊ x ⌋ ≡ ⌊ ¬? x ⌋
+not-¬ (yes x) = refl
+not-¬ (no x) = refl
+
+
 
 
