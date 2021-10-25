@@ -186,5 +186,20 @@ not-¬ (yes x) = refl
 not-¬ (no x) = refl
 
 
+{-
+Give analogues of the _⇔_ operation from Chapter Isomorphism, operation on booleans and decidables, and also show the corresponding erasure:
+postulate
+  _iff_ : Bool → Bool → Bool
+  _⇔-dec_ : ∀ {A B : Set} → Dec A → Dec B → Dec (A ⇔ B)
+  iff-⇔ : ∀ {A B : Set} (x : Dec A) (y : Dec B) → ⌊ x ⌋ iff ⌊ y ⌋ ≡ ⌊ x ⇔-dec y ⌋
+-}
+
+_iff_ : Bool → Bool → Bool
+true iff true  = true
+true iff false = false
+false iff true = false
+false iff false = true
+
+
 
 
